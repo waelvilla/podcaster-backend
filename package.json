@@ -14,14 +14,21 @@
     "build": "ts-node ./tasks/run-build.ts",
     "build:dev": "ts-node --project ./tsconfig-dev.json ./tasks/run-build.ts -d",
     "start": "node ./dist/index.js",
+    "execute": "ts-node ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "@types/node": "^14.14.31",
+    "@types/sqlite3": "^3.1.7",
     "ts-node": "^9.1.1",
     "typescript": "^4.3.2"
   },
   "dependencies": {
-    "graphql-yoga": "^1.18.3"
+    "@graphql-tools/graphql-file-loader": "^7.3.3",
+    "@graphql-tools/load": "^7.4.1",
+    "@graphql-tools/resolvers-composition": "^6.4.1",
+    "@graphql-tools/schema": "^8.3.1",
+    "graphql-yoga": "^1.18.3",
+    "sqlite3": "^5.0.2"
   }
 }

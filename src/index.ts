@@ -1,6 +1,4 @@
 import { GraphQLServer } from 'graphql-yoga'
-// ... or using `require()`
-// const { GraphQLServer } = require('graphql-yoga')
 
 const typeDefs = `
   type Query {
