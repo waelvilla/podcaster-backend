@@ -1,16 +1,28 @@
-import { GraphQLServer } from 'graphql-yoga'
+import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { loadSchemaSync } from "@graphql-tools/load";
+import { graphqlHTTP } from 'express-graphql';
+import express from 'express';
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import graphqlResolver from './resolvers';
 
-const typeDefs = `
-  type Query {
-    hello(name: String): String!
-  }
-`
 
-const resolvers = {
-  Query: {
-    hello: (_, { name }) => `Hello ${name || 'World'}`,
-  },
-}
+const schema = makeExecutableSchema({
+  typeDefs: loadSchemaSync('./src/schemas/**/*.graphql', {
+    loaders: [new GraphQLFileLoader()],
+  }),
+  resolvers: graphqlResolver,
+});
 
-const server = new GraphQLServer({ typeDefs, resolvers })
-server.start(() => console.log('Server is running on localhost:4000'))
+const server = express();
+const PORT = process.env.PORT || 4000;
+
+server.use(
+  '/graphql',
+  graphqlHTTP({
+    schema,
+    graphiql: true,
+  })
+);
+
+
+server.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));

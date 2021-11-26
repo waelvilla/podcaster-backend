@@ -2,7 +2,7 @@ import Sqlite3 from 'sqlite3';
 
 const sqlite3 = Sqlite3.verbose();
 
-const db = new sqlite3.Database('data.db');
+export const db = new sqlite3.Database('data.db');
 
 function init() {
     db.serialize(function () {
@@ -22,14 +22,6 @@ export function insert() {
     });
 }
 
-export function getAllUsers(){
-    db.all(`SELECT * FROM users`,(err, rows) => {
-        if (err) {
-            return console.log(err.message);
-        }
-        console.log('got rows:', rows);
-        
-    });
-}
 
 db.close();
+
