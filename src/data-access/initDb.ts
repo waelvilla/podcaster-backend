@@ -6,7 +6,7 @@ export const db = new sqlite3.Database('data.db');
 
 function init() {
     db.serialize(function () {
-        db.run("CREATE TABLE users (user_id text PRIMARY KEY NOT NULL, username text, password text, created_at text, last_login text)");
+        db.run("CREATE TABLE users (user_id text PRIMARY KEY NOT NULL, username text, password text, created_at text, last_login text, email text)");
 
     });
 
