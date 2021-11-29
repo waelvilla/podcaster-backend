@@ -1,6 +1,6 @@
 import { composeResolvers } from "@graphql-tools/resolvers-composition";
 import { ApolloError } from "apollo-server-errors";
-import { Resolvers } from "../../../generated/graphql-types";
+import {  MutationLoginUserArgs, Resolvers } from "../../../generated/graphql-types";
 import usersDb from "../../data-access/users";
 
 const userResolvers: Resolvers = {
@@ -24,7 +24,26 @@ const userResolvers: Resolvers = {
         }
     }
   },
-  Mutation: {},
+  Mutation: {
+    loginUser: async (parent, {username, password}: MutationLoginUserArgs, context) => {
+      try {
+        if (!username?.length || !password?.length) {
+          throw new ApolloError('empty username or password');
+        }
+        const user = await usersDb.login(username, password)
+        if (user.id) {
+          const newLastLogin = new Date().toISOString()
+          await usersDb.updateLastLogin(newLastLogin, user.id )
+          return user;
+        }
+        throw new ApolloError('incorrect username or password');
+
+      } catch (error) {
+        console.log('error logging in:', error);
+        throw new ApolloError(`cannot login user ${username}`);
+      }
+    }
+  },
 };
 
 export default composeResolvers(userResolvers);

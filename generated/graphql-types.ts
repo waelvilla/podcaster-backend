@@ -23,12 +23,19 @@ export type Error = {
 export type Mutation = {
   __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
+  loginUser?: Maybe<User>;
+};
+
+
+export type MutationLoginUserArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
   _empty?: Maybe<Scalars['String']>;
-  getAllUsers: Array<Maybe<UsersOrError>>;
+  getAllUsers?: Maybe<Array<User>>;
   user: User;
 };
 
@@ -40,13 +47,12 @@ export type QueryUserArgs = {
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['Date']>;
+  email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   lastLogin?: Maybe<Scalars['Date']>;
   password?: Maybe<Scalars['String']>;
   username: Scalars['String'];
 };
-
-export type UsersOrError = Error | User;
 
 
 
@@ -124,7 +130,6 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
-  UsersOrError: ResolversTypes['Error'] | ResolversTypes['User'];
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -136,7 +141,6 @@ export type ResolversParentTypes = {
   Query: {};
   String: Scalars['String'];
   User: User;
-  UsersOrError: ResolversParentTypes['Error'] | ResolversParentTypes['User'];
 };
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -150,25 +154,23 @@ export type ErrorResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  loginUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'password' | 'username'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  getAllUsers?: Resolver<Array<Maybe<ResolversTypes['UsersOrError']>>, ParentType, ContextType>;
+  getAllUsers?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastLogin?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UsersOrErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['UsersOrError'] = ResolversParentTypes['UsersOrError']> = {
-  __resolveType: TypeResolveFn<'Error' | 'User', ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -177,6 +179,5 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
-  UsersOrError?: UsersOrErrorResolvers<ContextType>;
 };
 

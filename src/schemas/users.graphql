@@ -12,3 +12,7 @@ extend type Query {
     getAllUsers: [User!]
     user(id: String!): User!
 }
+
+extend type Mutation {
+    loginUser(username: String!, password: String!): User
+}
